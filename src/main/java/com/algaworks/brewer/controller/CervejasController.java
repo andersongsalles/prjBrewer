@@ -21,17 +21,17 @@ import com.algaworks.brewer.model.Origem;
 import com.algaworks.brewer.model.Sabor;
 import com.algaworks.brewer.repository.Cervejas;
 import com.algaworks.brewer.repository.Estilos;
+import com.algaworks.brewer.service.CadastroCervejaService;
 
 @Controller
 public class CervejasController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(CervejasController.class);
-
-	@Autowired
-	private Cervejas cervejas;
-	
+		
 	@Autowired
 	private Estilos estilos;
+	
+	@Autowired
+	private CadastroCervejaService CadastroCervejaService;
 	
 	@RequestMapping("/cervejas/novo")
 	public ModelAndView novo(Cerveja cerveja) {
@@ -46,21 +46,12 @@ public class CervejasController {
 	
 	@RequestMapping(value = "/cervejas/novo", method = RequestMethod.POST)
 	public ModelAndView cadastrar(@Valid Cerveja cerveja, BindingResult result, Model model, RedirectAttributes attributes) {
-//		if (result.hasErrors()) {
-//			return novo(cerveja);
-//		}
+		if (result.hasErrors()) {
+			return novo(cerveja);
+		}
 		
-		// Salvar no banco de dados...
+		CadastroCervejaService.salvar(cerveja);
 		attributes.addFlashAttribute("mensagem", "Cerveja salva com sucesso!");
-		System.out.println(">>> sku: " + cerveja.getSku());
-		System.out.println(">>> sabor:" + cerveja.getSabor());
-		System.out.println(">>> Origem:" + cerveja.getOrigem());
-		System.out.println(">>> Nome:" + cerveja.getNome());
-		System.out.println(">>> Descricao:" + cerveja.getDescricao());		
-		System.out.println(">>> Teor alcoolico:" + cerveja.getTeorAlcoolico());
-		System.out.println(">>> Valor:" + cerveja.getValor());
-		System.out.println(">>> Comissao:" + cerveja.getComissao());
-		System.out.println(">>> Estoque:" + cerveja.getQuantidadeEstoque());
 		return new ModelAndView("redirect:/cervejas/novo");
 	}
 	
