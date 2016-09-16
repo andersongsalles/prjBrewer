@@ -12,12 +12,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -77,6 +78,17 @@ public class Cerveja implements Serializable{
 	@ManyToOne
 	@JoinColumn(name = "codigo_estilo")
 	private Estilo estilo;
+	
+	private String foto;
+
+	@Column(name = "content_type")
+	private String contentType;
+	
+	
+	@PrePersist @PreUpdate
+	private void prePersistUpdate() {
+		sku = sku.toUpperCase();
+	}
 	
 	public String getSku() {
 		return sku;
@@ -164,6 +176,22 @@ public class Cerveja implements Serializable{
 
 	public void setEstilo(Estilo estilo) {
 		this.estilo = estilo;
+	}
+	
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
 	}
 
 	@Override
